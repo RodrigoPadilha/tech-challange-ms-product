@@ -1,6 +1,6 @@
 import { IConnectionDatabase } from "@adapters/ports/IConnectionDatabase";
 import IHttpServer from "@adapters/ports/IHttpServer";
-import { PedidoController } from "src/controllers/PedidoController";
+import { PedidoController } from "@src/controllers/PedidoController";
 
 export class PedidoFactory {
     private readonly pedidoController: PedidoController;

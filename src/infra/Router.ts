@@ -1,6 +1,6 @@
 import IHttpServer from "@adapters/ports/IHttpServer";
 import { IConnectionDatabase } from "@adapters/ports/IConnectionDatabase";
-import { PedidoFactory } from "src/factories/PedidoFactory";
+import { PedidoFactory } from "@src/factories/PedidoFactory";
 /* import { ClientFactory } from "src/factories/ClientFactory";
 import { ProductFactory } from "src/factories/ProductFactory";
 import { OrderFactory } from "src/factories/OrderFactory"; */

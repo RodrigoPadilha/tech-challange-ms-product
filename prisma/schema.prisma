@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model PedidoProps {
+  id     String       @id @default(uuid())
+  valor  Float
+  status StatusPedido
+  itens  Item[]
+
+  clienteId String
+  cliente   Cliente @relation(fields: [clienteId], references: [id])
+}
+
+model Cliente {
+  id          String        @id @default(uuid())
+  nome        String
+  cpf         String
+  PedidoProps PedidoProps[]
+}
+
+model Item {
+  id        String   @id @default(uuid())
+  descricao String
+  preco     Float
+  tipo      TipoItem
+  qtd       Int
+
+  pedidoPropsId String?
+  PedidoProps   PedidoProps? @relation(fields: [pedidoPropsId], references: [id])
+}
+
+enum StatusPedido {
+  aberto
+  cancelado
+  aguardandoPagamento
+  pago
+  emPreparacao
+  pronto
+  entregue
+}
+
+enum TipoItem {
+  bebida
+  lanche
+  opcional
+  sobremesa
+}

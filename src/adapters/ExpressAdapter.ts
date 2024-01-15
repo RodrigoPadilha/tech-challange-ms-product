@@ -1,9 +1,9 @@
 import { Server } from "http";
 import express, { Application, Request, Response } from "express";
 import IHttpServer from "@adapters/ports/IHttpServer";
-import { HttpResponse } from "src/util/http-helper";
+import { HttpResponse } from "@src/util/http-helper";
 import swaggerUi from "swagger-ui-express";
-import * as swaggerDocument from "src/infra/docs/swagger.json";
+import * as swaggerDocument from "@src/infra/docs/swagger.json";
 
 export class ExpressAdapter implements IHttpServer {
   private app: Application;

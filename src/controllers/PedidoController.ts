@@ -1,5 +1,5 @@
 import IHttpServer from "@adapters/ports/IHttpServer";
-import { ok, serverError } from "src/util/http-helper";
+import { ok, serverError } from "../util/http-helper";
 
 export class PedidoController {
     constructor(
