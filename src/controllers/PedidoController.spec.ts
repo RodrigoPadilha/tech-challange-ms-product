@@ -1,9 +1,11 @@
 import { PedidoController } from "./PedidoController";
 import IHttpServer from "@adapters/ports/IHttpServer";
+import { PedidoService } from "@src/services/PedidoService";
 import { ok, serverError } from "@src/util/http-helper";
 
 describe("PedidoController", () => {
   let httpServer: IHttpServer;
+  let pedidoService: PedidoService;
   let pedidoController: PedidoController;
 
   beforeEach(() => {
@@ -14,82 +16,58 @@ describe("PedidoController", () => {
       stop: jest.fn().mockResolvedValue(undefined),
     };
 
-    pedidoController = new PedidoController(httpServer);
-
-    // Simula a chamada do método register
-    pedidoController.registerEndpointListProducts();
-
-    // Agora, acesse o callback a partir das chamadas do método register
-    /* const registerCallback = (httpServer.register as jest.Mock).mock
-      .calls[0][2]; */
-
-    // Adicione isso para garantir que o método register seja chamado corretamente
-    (httpServer.register as jest.Mock).mockImplementationOnce(
-      (method: string, endpoint: string, callback: Function) => {
-        // Simula o registro chamando o callback
-        callback({}, {}, {});
-      }
-    );
+    pedidoService = new PedidoService();
+    pedidoController = new PedidoController(httpServer, pedidoService);
   });
 
-  describe("registerEndpointListProducts", () => {
-    it('should register endpoint "/producao" with method "get"', async () => {
-      // Arrange
-      const expectedEndpoint = "/producao";
-      const expectedMethod = "get";
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
 
-      // Act
-      pedidoController.registerEndpointListProducts();
+  describe("Register Endpoints", () => {
+    it("Should register endpoint registerEndpointListPedidos with url /producao ", () => {
+      pedidoController.registerEndpointListPedidos();
 
-      // Assert
-      expect(httpServer.register).toHaveBeenCalledWith(
-        expectedMethod,
-        expectedEndpoint,
-        expect.any(Function)
-      );
-
-      // You can also test the callback function, but it's not always necessary
-    });
-
-    it("should return ok when callback succeeds", async () => {
-      // Arrange
-      const registerCallback = (httpServer.register as jest.Mock).mock
-        .calls[0][2];
-      const mockParams = {};
-      const mockBody = {};
-      const mockQuery = {};
-
-      // Act
-      const result = await registerCallback(mockParams, mockBody, mockQuery);
-
-      // Assert
-      expect(result).toEqual(ok({ message: "Retorno OK" }));
-    });
-
-    it("should return server error when callback throws an error", async () => {
-      const mockParams = {};
-      const mockBody = {};
-      const mockQuery = {};
-
-      // Mock implementation of IHttpServer.register function
-      const registerCallback = httpServer.register as jest.Mock;
-      registerCallback.mockImplementationOnce(
-        async (method: string, path: string, handler: Function) => {
-          // Throw an error to simulate an error in the handler function
-          const error = new Error("Mock error");
-          const result = await handler(mockParams, mockBody, mockQuery);
-
-          // Assert that the result is a server error
-          expect(result).toEqual(serverError(error));
-        }
-      );
-
-      await pedidoController.registerEndpointListProducts();
       expect(httpServer.register).toHaveBeenCalledWith(
         "get",
         "/producao",
         expect.any(Function)
       );
+    });
+  });
+
+  describe("Request PedidoController", () => {
+    it("Should return status 200 when list products is called with Successful", async () => {
+      const mockParams = {};
+      const mockBody = {};
+      const mockQuery = {};
+
+      pedidoController.registerEndpointListPedidos();
+      // Chama a função passada como argumento diretamente
+      const handler = (httpServer.register as jest.Mock).mock.calls[0][2];
+      const result = await handler(mockParams, mockBody, mockQuery);
+
+      // Verifica se a função retorna uma resposta de sucesso
+      expect(result.statusCode).toBe(200);
+      expect(result.body.message).toBe("Retorno OK");
+    });
+
+    it("Should return status 500 when list products is called with Fail", async () => {
+      const mockParams = {};
+      const mockBody = {};
+      const mockQuery = {};
+
+      const mockListProducts = jest.spyOn(pedidoService, "listPedidos");
+      mockListProducts.mockRejectedValueOnce(new Error("Erro simulado"));
+      pedidoController.registerEndpointListPedidos();
+      // Chama a função passada como argumento diretamente
+      const handler = (httpServer.register as jest.Mock).mock.calls[0][2];
+      const result = await handler(mockParams, mockBody, mockQuery);
+
+      // Verifica se a função retorna uma resposta de sucesso
+      expect(result).toEqual(serverError(new Error("Erro simulado")));
+      expect(result.statusCode).toBe(500);
+      expect(result.body.message).toBe("Erro simulado");
     });
   });
 });

@@ -1,20 +1,24 @@
 import { IConnectionDatabase } from "@adapters/ports/IConnectionDatabase";
 import IHttpServer from "@adapters/ports/IHttpServer";
 import { PedidoController } from "@src/controllers/PedidoController";
+import { PedidoService } from "@src/services/PedidoService";
 
 export class PedidoFactory {
-    private readonly pedidoController: PedidoController;
-    //private readonly productDao: PedidoDao;
-  
-    constructor(
-      private readonly httpServer: IHttpServer,
-      private readonly connection: IConnectionDatabase
-    ) {
-      this.pedidoController = new PedidoController(this.httpServer);
-      // this.pedidoDao = new ProductDao(this.connection);
-    }
+  private readonly pedidoController: PedidoController;
 
-    makeListPedidosController = () => {
-        this.pedidoController.registerEndpointListProducts()
-    }
+  constructor(
+    private readonly httpServer: IHttpServer,
+    private readonly connection: IConnectionDatabase
+  ) {
+    //const pedidoRepository = new PedidoRepository();
+    const pedidoService = new PedidoService(/* pedidoRepository */);
+    this.pedidoController = new PedidoController(
+      this.httpServer,
+      pedidoService
+    );
+  }
+
+  makeListPedidosController = () => {
+    this.pedidoController.registerEndpointListPedidos();
+  };
 }
