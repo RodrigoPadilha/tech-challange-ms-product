@@ -21,4 +21,8 @@ export class PedidoFactory {
   makeListPedidosController = () => {
     this.pedidoController.registerEndpointListPedidos();
   };
+
+  makeCreatePedidosController = () => {
+    this.pedidoController.registerEndpointCreatePedidos();
+  };
 }

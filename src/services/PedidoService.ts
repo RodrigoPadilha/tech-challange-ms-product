@@ -15,4 +15,19 @@ export class PedidoService {
       },
     ];
   }
+
+  async createPedido() {
+    return {
+      id: "abc",
+      valor: "1.78",
+      status: "Aberto",
+      itens: [
+        {
+          a: "",
+          b: "",
+        },
+      ],
+      cliente: "Rodrigo",
+    };
+  }
 }

@@ -16,8 +16,9 @@ export default class Router {
 
     const pedidoFacotry = new PedidoFactory(this.httpServer, this.connection);
     pedidoFacotry.makeListPedidosController();
+    pedidoFacotry.makeCreatePedidosController();
 
-/*     const clientFactory = new ClientFactory(this.httpServer, this.connection);
+    /*     const clientFactory = new ClientFactory(this.httpServer, this.connection);
     clientFactory.makeCreateClientController();
     clientFactory.makeListAllClientsController();
     clientFactory.makeGetClientByCpf();
