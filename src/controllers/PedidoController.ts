@@ -1,6 +1,7 @@
 import IHttpServer from "@adapters/ports/IHttpServer";
 import { badRequest, created, ok, serverError } from "../util/http-helper";
 import { PedidoService } from "@src/services/PedidoService";
+import { PedidoStatus } from "@src/entities/PedidoEntity";
 
 export class PedidoController {
   constructor(
@@ -29,8 +30,13 @@ export class PedidoController {
       "/producao",
       async (params: any, body: any, query: any) => {
         try {
-          const { itens, cliente, preco } = body;
-          const pedido = await this.pedidoService.createPedido();
+          const { itens, cliente, valor } = body;
+          const pedido = await this.pedidoService.createPedido({
+            itens,
+            cliente,
+            valor,
+            status: PedidoStatus.ABERTO,
+          });
           return created({ message: "Retorno OK", pedido });
         } catch (error) {
           return serverError(error);

@@ -1,3 +1,4 @@
+import { IPedidoRepository } from "@adapters/ports/IPedidoRepository";
 import { PedidoController } from "./PedidoController";
 import IHttpServer from "@adapters/ports/IHttpServer";
 import { PedidoService } from "@src/services/PedidoService";
@@ -22,7 +23,11 @@ describe("PedidoController", () => {
       stop: jest.fn().mockResolvedValue(undefined),
     };
 
-    pedidoService = new PedidoService();
+    const mockPedidoRepository: jest.Mocked<IPedidoRepository> = {
+      savePedido: jest.fn(),
+      listAllPedidos: jest.fn(),
+    };
+    pedidoService = new PedidoService(mockPedidoRepository);
     pedidoController = new PedidoController(httpServer, pedidoService);
   });
 
@@ -190,7 +195,6 @@ describe("PedidoController", () => {
       const handler = (httpServer.register as jest.Mock).mock.calls[0][2];
       const result = await handler(mockParams, mockBody, mockQuery);
 
-      console.log(result);
       expect(result.statusCode).toBe(200);
     });
 

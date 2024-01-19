@@ -1,6 +1,7 @@
 import { IConnectionDatabase } from "@adapters/ports/IConnectionDatabase";
 import IHttpServer from "@adapters/ports/IHttpServer";
 import { PedidoController } from "@src/controllers/PedidoController";
+import { PedidoRepository } from "@src/repositories/PedidoRepository";
 import { PedidoService } from "@src/services/PedidoService";
 
 export class PedidoFactory {
@@ -10,8 +11,8 @@ export class PedidoFactory {
     private readonly httpServer: IHttpServer,
     private readonly connection: IConnectionDatabase
   ) {
-    //const pedidoRepository = new PedidoRepository();
-    const pedidoService = new PedidoService(/* pedidoRepository */);
+    const pedidoRepository = new PedidoRepository();
+    const pedidoService = new PedidoService(pedidoRepository);
     this.pedidoController = new PedidoController(
       this.httpServer,
       pedidoService
