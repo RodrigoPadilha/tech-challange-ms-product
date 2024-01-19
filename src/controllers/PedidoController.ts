@@ -1,5 +1,5 @@
 import IHttpServer from "@adapters/ports/IHttpServer";
-import { created, ok, serverError } from "../util/http-helper";
+import { badRequest, created, ok, serverError } from "../util/http-helper";
 import { PedidoService } from "@src/services/PedidoService";
 
 export class PedidoController {
@@ -23,7 +23,7 @@ export class PedidoController {
     );
   }
 
-  registerEndpointCreatePedidos() {
+  registerEndpointCreatePedido() {
     this.httpServer.register(
       "post",
       "/producao",
@@ -32,6 +32,25 @@ export class PedidoController {
           const { itens, cliente, preco } = body;
           const pedido = await this.pedidoService.createPedido();
           return created({ message: "Retorno OK", pedido });
+        } catch (error) {
+          return serverError(error);
+        }
+      }
+    );
+  }
+
+  registerEndpointFindPedido() {
+    this.httpServer.register(
+      "get",
+      "/producao/:pedidoId",
+      async (params: any, body: any, query: any) => {
+        try {
+          const { pedidoId } = params;
+          const pedido = await this.pedidoService.findPedido(pedidoId);
+          if (!pedido) {
+            return badRequest({ message: "Pedido não encontrado" });
+          }
+          return ok({ message: "Retorno OK", pedido });
         } catch (error) {
           return serverError(error);
         }

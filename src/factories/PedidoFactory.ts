@@ -23,6 +23,10 @@ export class PedidoFactory {
   };
 
   makeCreatePedidosController = () => {
-    this.pedidoController.registerEndpointCreatePedidos();
+    this.pedidoController.registerEndpointCreatePedido();
+  };
+
+  makeFindPedidosController = () => {
+    this.pedidoController.registerEndpointFindPedido();
   };
 }
