@@ -45,4 +45,8 @@ export class PedidoService {
       cliente: "Rodrigo",
     };
   }
+
+  async updatePedido(pedidoId: string) {
+    return {};
+  }
 }

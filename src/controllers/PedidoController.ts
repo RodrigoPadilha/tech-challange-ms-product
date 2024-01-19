@@ -57,4 +57,23 @@ export class PedidoController {
       }
     );
   }
+
+  registerEndpointUpdatePedido() {
+    this.httpServer.register(
+      "put",
+      "/producao/:pedidoId",
+      async (params: any, body: any, query: any) => {
+        try {
+          const { pedidoId } = params;
+          const pedidoUpdated = await this.pedidoService.updatePedido(pedidoId);
+          if (!pedidoUpdated) {
+            return badRequest({ message: "Pedido não encontrado" });
+          }
+          return ok({ message: "Retorno OK", pedidoUpdated });
+        } catch (error) {
+          return serverError(error);
+        }
+      }
+    );
+  }
 }

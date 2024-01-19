@@ -31,7 +31,7 @@ describe("PedidoController", () => {
   });
 
   describe("Register Endpoints", () => {
-    it("Should register endpoint registerEndpointListPedidos", () => {
+    it("Should register endpoint ListPedidos", () => {
       pedidoController.registerEndpointListPedidos();
 
       expect(httpServer.register).toHaveBeenCalledWith(
@@ -41,7 +41,7 @@ describe("PedidoController", () => {
       );
     });
 
-    it("Should register endpoint registerEndpointCreatePedido", () => {
+    it("Should register endpoint CreatePedido", () => {
       pedidoController.registerEndpointCreatePedido();
 
       expect(httpServer.register).toHaveBeenCalledWith(
@@ -51,11 +51,21 @@ describe("PedidoController", () => {
       );
     });
 
-    it("Should register endpoint registerEndpointFindPedido", () => {
+    it("Should register endpoint FindPedido", () => {
       pedidoController.registerEndpointFindPedido();
 
       expect(httpServer.register).toHaveBeenCalledWith(
         "get",
+        "/producao/:pedidoId",
+        expect.any(Function)
+      );
+    });
+
+    it("Should register endpoint UpdatePedido", () => {
+      pedidoController.registerEndpointUpdatePedido();
+
+      expect(httpServer.register).toHaveBeenCalledWith(
+        "put",
         "/producao/:pedidoId",
         expect.any(Function)
       );
@@ -135,12 +145,12 @@ describe("PedidoController", () => {
       expect(result.statusCode).toBe(200);
     });
 
-    it("Should return status 400 when find pedido not Found", async () => {
+    it("Should return status 400 when pedido not Found", async () => {
       const { mockParams, mockBody, mockQuery } = registerControllerParams;
       mockParams["pedidoId"] = uuidv4();
 
-      const mockListProducts = jest.spyOn(pedidoService, "findPedido");
-      mockListProducts.mockResolvedValueOnce(null);
+      const findPedidos = jest.spyOn(pedidoService, "findPedido");
+      findPedidos.mockResolvedValueOnce(null);
       pedidoController.registerEndpointFindPedido();
       // Chama a função passada como argumento diretamente
       const handler = (httpServer.register as jest.Mock).mock.calls[0][2];
@@ -159,6 +169,54 @@ describe("PedidoController", () => {
       const mockListProducts = jest.spyOn(pedidoService, "findPedido");
       mockListProducts.mockRejectedValueOnce(new Error("Erro simulado"));
       pedidoController.registerEndpointFindPedido();
+      // Chama a função passada como argumento diretamente
+      const handler = (httpServer.register as jest.Mock).mock.calls[0][2];
+      const result = await handler(mockParams, mockBody, mockQuery);
+
+      // Verifica se a função retorna uma resposta de sucesso
+      expect(result).toEqual(serverError(new Error("Erro simulado")));
+      expect(result.statusCode).toBe(500);
+      expect(result.body.message).toBe("Erro simulado");
+    });
+  });
+
+  describe("Request UpdatePedidoController", () => {
+    it("Should return status 200 when update pedido is called with Successful", async () => {
+      const { mockParams, mockBody, mockQuery } = registerControllerParams;
+      mockParams["pedidoId"] = uuidv4();
+
+      pedidoController.registerEndpointUpdatePedido();
+      // Chama a função passada como argumento diretamente
+      const handler = (httpServer.register as jest.Mock).mock.calls[0][2];
+      const result = await handler(mockParams, mockBody, mockQuery);
+
+      console.log(result);
+      expect(result.statusCode).toBe(200);
+    });
+
+    it("Should return status 400 when pedidoId not Found", async () => {
+      const { mockParams, mockBody, mockQuery } = registerControllerParams;
+      mockParams["pedidoId"] = uuidv4();
+
+      const mockListProducts = jest.spyOn(pedidoService, "updatePedido");
+      mockListProducts.mockResolvedValueOnce(null);
+      pedidoController.registerEndpointUpdatePedido();
+      // Chama a função passada como argumento diretamente
+      const handler = (httpServer.register as jest.Mock).mock.calls[0][2];
+      const result = await handler(mockParams, mockBody, mockQuery);
+
+      // Verifica se a função retorna uma resposta de sucesso
+      expect(result).toEqual(badRequest({ message: "Pedido não encontrado" }));
+      expect(result.statusCode).toBe(400);
+      expect(result.body.message).toBe("Pedido não encontrado");
+    });
+    it("Should return status 500 when update pedidos is called with Fail", async () => {
+      const { mockParams, mockBody, mockQuery } = registerControllerParams;
+      mockParams["pedidoId"] = uuidv4();
+
+      const mockListProducts = jest.spyOn(pedidoService, "updatePedido");
+      mockListProducts.mockRejectedValueOnce(new Error("Erro simulado"));
+      pedidoController.registerEndpointUpdatePedido();
       // Chama a função passada como argumento diretamente
       const handler = (httpServer.register as jest.Mock).mock.calls[0][2];
       const result = await handler(mockParams, mockBody, mockQuery);
