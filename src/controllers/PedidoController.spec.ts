@@ -73,7 +73,7 @@ describe("PedidoController", () => {
   });
 
   describe("Request ListPedidosController", () => {
-    it("Should return status 200 when list products is called with Successful", async () => {
+    it("Should return status 200 when list pedidos is called with Successful", async () => {
       const { mockParams, mockBody, mockQuery } = registerControllerParams;
 
       pedidoController.registerEndpointListPedidos();
@@ -86,11 +86,11 @@ describe("PedidoController", () => {
       expect(result.body.message).toBe("Retorno OK");
     });
 
-    it("Should return status 500 when list products is called with Fail", async () => {
+    it("Should return status 500 when list pedidos is called with Fail", async () => {
       const { mockParams, mockBody, mockQuery } = registerControllerParams;
 
-      const mockListProducts = jest.spyOn(pedidoService, "listPedidos");
-      mockListProducts.mockRejectedValueOnce(new Error("Erro simulado"));
+      const mockListPedidos = jest.spyOn(pedidoService, "listPedidos");
+      mockListPedidos.mockRejectedValueOnce(new Error("Erro simulado"));
       pedidoController.registerEndpointListPedidos();
       // Chama a função passada como argumento diretamente
       const handler = (httpServer.register as jest.Mock).mock.calls[0][2];
@@ -118,8 +118,8 @@ describe("PedidoController", () => {
     it("Should return status 500 when create pedidos is called with Fail", async () => {
       const { mockParams, mockBody, mockQuery } = registerControllerParams;
 
-      const mockListProducts = jest.spyOn(pedidoService, "createPedido");
-      mockListProducts.mockRejectedValueOnce(new Error("Erro simulado"));
+      const mockCreatePedidos = jest.spyOn(pedidoService, "createPedido");
+      mockCreatePedidos.mockRejectedValueOnce(new Error("Erro simulado"));
       pedidoController.registerEndpointCreatePedido();
       // Chama a função passada como argumento diretamente
       const handler = (httpServer.register as jest.Mock).mock.calls[0][2];
@@ -149,8 +149,8 @@ describe("PedidoController", () => {
       const { mockParams, mockBody, mockQuery } = registerControllerParams;
       mockParams["pedidoId"] = uuidv4();
 
-      const findPedidos = jest.spyOn(pedidoService, "findPedido");
-      findPedidos.mockResolvedValueOnce(null);
+      const mockFindPedidos = jest.spyOn(pedidoService, "findPedido");
+      mockFindPedidos.mockResolvedValueOnce(null);
       pedidoController.registerEndpointFindPedido();
       // Chama a função passada como argumento diretamente
       const handler = (httpServer.register as jest.Mock).mock.calls[0][2];
@@ -166,8 +166,8 @@ describe("PedidoController", () => {
       const { mockParams, mockBody, mockQuery } = registerControllerParams;
       mockParams["pedidoId"] = uuidv4();
 
-      const mockListProducts = jest.spyOn(pedidoService, "findPedido");
-      mockListProducts.mockRejectedValueOnce(new Error("Erro simulado"));
+      const mockfindPedidos = jest.spyOn(pedidoService, "findPedido");
+      mockfindPedidos.mockRejectedValueOnce(new Error("Erro simulado"));
       pedidoController.registerEndpointFindPedido();
       // Chama a função passada como argumento diretamente
       const handler = (httpServer.register as jest.Mock).mock.calls[0][2];
@@ -198,8 +198,8 @@ describe("PedidoController", () => {
       const { mockParams, mockBody, mockQuery } = registerControllerParams;
       mockParams["pedidoId"] = uuidv4();
 
-      const mockListProducts = jest.spyOn(pedidoService, "updatePedido");
-      mockListProducts.mockResolvedValueOnce(null);
+      const mockUpdatePedido = jest.spyOn(pedidoService, "updatePedido");
+      mockUpdatePedido.mockResolvedValueOnce(null);
       pedidoController.registerEndpointUpdatePedido();
       // Chama a função passada como argumento diretamente
       const handler = (httpServer.register as jest.Mock).mock.calls[0][2];
@@ -214,8 +214,8 @@ describe("PedidoController", () => {
       const { mockParams, mockBody, mockQuery } = registerControllerParams;
       mockParams["pedidoId"] = uuidv4();
 
-      const mockListProducts = jest.spyOn(pedidoService, "updatePedido");
-      mockListProducts.mockRejectedValueOnce(new Error("Erro simulado"));
+      const mockUpdatePedido = jest.spyOn(pedidoService, "updatePedido");
+      mockUpdatePedido.mockRejectedValueOnce(new Error("Erro simulado"));
       pedidoController.registerEndpointUpdatePedido();
       // Chama a função passada como argumento diretamente
       const handler = (httpServer.register as jest.Mock).mock.calls[0][2];
