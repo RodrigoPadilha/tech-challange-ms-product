@@ -71,7 +71,13 @@ export class PedidoController {
       async (params: any, body: any, query: any) => {
         try {
           const { pedidoId } = params;
-          const pedidoUpdated = await this.pedidoService.updatePedido(pedidoId);
+          const { newStatus } = body;
+          const enumNewStatus: PedidoStatus =
+            PedidoStatus[newStatus as keyof typeof PedidoStatus];
+          const pedidoUpdated = await this.pedidoService.updatePedido(
+            pedidoId,
+            enumNewStatus
+          );
           if (!pedidoUpdated) {
             return badRequest({ message: "Pedido não encontrado" });
           }

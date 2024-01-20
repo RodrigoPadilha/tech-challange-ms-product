@@ -9,30 +9,10 @@ export enum PedidoStatus {
 }
 export class PedidoEntity {
   constructor(
-    private readonly valor: number,
-    private readonly status: PedidoStatus,
-    private readonly itens: [{}],
-    private readonly cliente: { nome: string; cpf: string },
-    private readonly id?: string
+    readonly valor: number,
+    readonly status: PedidoStatus,
+    readonly itens: [{}],
+    readonly cliente: { nome: string; cpf: string },
+    readonly id?: string
   ) {}
-
-  getId() {
-    return this.id;
-  }
-  /*
-  getValor() {
-    return this.valor;
-  }
-
-  getStatus() {
-    return this.status;
-  }
-
-  getItens() {
-    return this.itens;
-  }
-
-  getCliente() {
-    return this.cliente;
-  } */
 }

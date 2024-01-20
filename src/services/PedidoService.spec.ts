@@ -7,15 +7,51 @@ import { PedidoDto } from "./interface";
 class PedidoRepositoryMock implements IPedidoRepository {
   private readonly pedidos: PedidoEntity[] = [];
 
-  savePedido(novoPedido: PedidoEntity): Promise<string> {
+  async savePedido(newPedido: PedidoEntity): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.pedidos.push(novoPedido);
-      resolve(novoPedido.getId());
+      this.pedidos.push(newPedido);
+      resolve(newPedido.id);
     });
   }
 
   async listAllPedidos(): Promise<PedidoEntity[]> {
     return this.pedidos;
+  }
+
+  async findPedidoById(pedidoId: any): Promise<PedidoEntity> {
+    return this.pedidos.find((pedido) => pedido.id === pedidoId);
+  }
+
+  async updatePedido(
+    pedidoId: string,
+    newStatus: PedidoStatus
+  ): Promise<string> {
+    const pedidoIndex = this.findPedidoIndexById(pedidoId);
+    if (pedidoIndex === -1) {
+      return undefined;
+    }
+    const pedidoToUpdate = this.pedidos[pedidoIndex];
+    const pedidoUpdated = new PedidoEntity(
+      pedidoToUpdate.valor,
+      newStatus,
+      pedidoToUpdate.itens,
+      pedidoToUpdate.cliente,
+      pedidoToUpdate.id
+    );
+    const updatedPedido = { ...pedidoToUpdate, status: newStatus };
+    this.updatePedidoInArray(pedidoIndex, pedidoUpdated);
+    return pedidoUpdated.id;
+  }
+
+  private findPedidoIndexById(pedidoId: string): number {
+    return this.pedidos.findIndex((pedido) => pedido.id === pedidoId);
+  }
+
+  private updatePedidoInArray(
+    index: number,
+    updatedPedido: PedidoEntity
+  ): void {
+    this.pedidos.splice(index, 1, updatedPedido);
   }
 }
 
@@ -65,6 +101,44 @@ describe("PedidoService", () => {
 
       expect(result).toEqual(expect.any(Array));
       expect(result.length).toEqual(2);
+    });
+
+    it("Deve encontrar um Pedido por pedidoId", async () => {
+      const pedidoRepository = new PedidoRepositoryMock();
+      const pedidoService = new PedidoService(pedidoRepository);
+      const pedidoId = uuidv4();
+      const pedidoEntity = buildPedidoDto(
+        2.48,
+        PedidoStatus.ABERTO,
+        [{}],
+        { nome: "Rodrigo", cpf: "83888888888" },
+        pedidoId
+      );
+
+      await pedidoService.createPedido(pedidoEntity);
+      const result = await pedidoService.findPedido(pedidoId);
+
+      expect(result.id).toBe(pedidoId);
+    });
+
+    it("Deve atualizar status do pedido", async () => {
+      const pedidoRepository = new PedidoRepositoryMock();
+      const pedidoService = new PedidoService(pedidoRepository);
+      const pedidoId = uuidv4();
+      const pedidoEntity = buildPedidoDto(
+        2.48,
+        PedidoStatus.ABERTO,
+        [{}],
+        { nome: "Rodrigo", cpf: "83888888888" },
+        pedidoId
+      );
+      const newStatus = PedidoStatus.CANCELADO;
+
+      await pedidoService.createPedido(pedidoEntity);
+      const result = await pedidoService.updatePedido(pedidoId, newStatus);
+      const pedidoUpdated = await pedidoService.findPedido(result);
+
+      expect(pedidoUpdated.status).toBe(newStatus);
     });
   });
 });

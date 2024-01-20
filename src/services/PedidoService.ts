@@ -1,6 +1,6 @@
 import { IPedidoRepository } from "@adapters/ports/IPedidoRepository";
 import { PedidoDto } from "./interface";
-import { PedidoEntity } from "@src/entities/PedidoEntity";
+import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
 
 export class PedidoService {
   constructor(private readonly repository: IPedidoRepository) {}
@@ -18,21 +18,12 @@ export class PedidoService {
   }
 
   async findPedido(pedidoId: string) {
-    return {
-      id: "abc",
-      valor: "1.78",
-      status: "Aberto",
-      itens: [
-        {
-          a: "",
-          b: "",
-        },
-      ],
-      cliente: "Rodrigo",
-    };
+    const result = await this.repository.findPedidoById(pedidoId);
+    return result;
   }
 
-  async updatePedido(pedidoId: string) {
-    return {};
+  async updatePedido(pedidoId: string, newStatus: PedidoStatus) {
+    const result = await this.repository.updatePedido(pedidoId, newStatus);
+    return result;
   }
 }

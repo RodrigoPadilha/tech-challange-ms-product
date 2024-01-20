@@ -26,6 +26,8 @@ describe("PedidoController", () => {
     const mockPedidoRepository: jest.Mocked<IPedidoRepository> = {
       savePedido: jest.fn(),
       listAllPedidos: jest.fn(),
+      findPedidoById: jest.fn(),
+      updatePedido: jest.fn(),
     };
     pedidoService = new PedidoService(mockPedidoRepository);
     pedidoController = new PedidoController(httpServer, pedidoService);
