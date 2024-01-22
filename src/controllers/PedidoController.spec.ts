@@ -4,6 +4,7 @@ import IHttpServer from "@adapters/ports/IHttpServer";
 import { PedidoService } from "@src/services/PedidoService";
 import { badRequest, serverError } from "@src/util/http-helper";
 import { v4 as uuidv4 } from "uuid";
+import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
 
 describe("PedidoController", () => {
   let httpServer: IHttpServer;
@@ -142,7 +143,21 @@ describe("PedidoController", () => {
   describe("Request FindPedido", () => {
     it("Should return status 200 when find pedido is called with Successful", async () => {
       const { mockParams, mockBody, mockQuery } = registerControllerParams;
-      mockParams["pedidoId"] = uuidv4();
+      const pedidoId = uuidv4();
+      mockParams["pedidoId"] = pedidoId;
+      const mockPedidoService = jest.spyOn(pedidoService, "findPedido");
+      mockPedidoService.mockResolvedValueOnce(
+        buildPedidoEntity(
+          1.99,
+          PedidoStatus.ABERTO,
+          [{}],
+          {
+            nome: "Any_name",
+            cpf: "Any_cpf",
+          },
+          pedidoId
+        )
+      );
 
       pedidoController.registerEndpointFindPedido();
       // Chama a função passada como argumento diretamente
@@ -190,7 +205,11 @@ describe("PedidoController", () => {
   describe("Request UpdatePedidoController", () => {
     it("Should return status 200 when update pedido is called with Successful", async () => {
       const { mockParams, mockBody, mockQuery } = registerControllerParams;
-      mockParams["pedidoId"] = uuidv4();
+      const pedidoId = uuidv4();
+
+      mockParams["pedidoId"] = pedidoId;
+      const mockPedidoService = jest.spyOn(pedidoService, "updatePedido");
+      mockPedidoService.mockResolvedValueOnce(pedidoId);
 
       pedidoController.registerEndpointUpdatePedido();
       // Chama a função passada como argumento diretamente
@@ -234,3 +253,11 @@ describe("PedidoController", () => {
     });
   });
 });
+
+const buildPedidoEntity = (
+  valor: number,
+  status: PedidoStatus,
+  itens: [{}],
+  cliente: { nome: string; cpf: string },
+  id: string
+): PedidoEntity => new PedidoEntity(valor, status, itens, cliente, id);

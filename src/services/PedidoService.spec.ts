@@ -63,7 +63,7 @@ describe("PedidoService", () => {
       const pedidoRepository = new PedidoRepositoryMock();
       const pedidoService = new PedidoService(pedidoRepository);
       const pedidoId = uuidv4();
-      const pedidoEntity = buildPedidoDto(
+      const pedidoDto = buildPedidoDto(
         2.48,
         PedidoStatus.ABERTO,
         [{}],
@@ -71,7 +71,7 @@ describe("PedidoService", () => {
         pedidoId
       );
 
-      const result = await pedidoService.createPedido(pedidoEntity);
+      const result = await pedidoService.createPedido(pedidoDto);
 
       expect(result).toBe(pedidoId);
     });
@@ -79,14 +79,14 @@ describe("PedidoService", () => {
     it("Deve retornar lista de pedidos", async () => {
       const pedidoRepository = new PedidoRepositoryMock();
       const pedidoService = new PedidoService(pedidoRepository);
-      const pedidoEntity_1 = buildPedidoDto(
+      const pedidoDto_1 = buildPedidoDto(
         2.48,
         PedidoStatus.ABERTO,
         [{}],
         { nome: "Rodrigo", cpf: "83888888888" },
         uuidv4()
       );
-      const pedidoEntity_2 = buildPedidoDto(
+      const pedidoDto_2 = buildPedidoDto(
         35.48,
         PedidoStatus.ABERTO,
         [{}],
@@ -94,8 +94,8 @@ describe("PedidoService", () => {
         uuidv4()
       );
 
-      await pedidoService.createPedido(pedidoEntity_1);
-      await pedidoService.createPedido(pedidoEntity_2);
+      await pedidoService.createPedido(pedidoDto_1);
+      await pedidoService.createPedido(pedidoDto_2);
 
       const result = await pedidoService.listPedidos();
 
@@ -107,7 +107,7 @@ describe("PedidoService", () => {
       const pedidoRepository = new PedidoRepositoryMock();
       const pedidoService = new PedidoService(pedidoRepository);
       const pedidoId = uuidv4();
-      const pedidoEntity = buildPedidoDto(
+      const pedidoDto = buildPedidoDto(
         2.48,
         PedidoStatus.ABERTO,
         [{}],
@@ -115,7 +115,7 @@ describe("PedidoService", () => {
         pedidoId
       );
 
-      await pedidoService.createPedido(pedidoEntity);
+      await pedidoService.createPedido(pedidoDto);
       const result = await pedidoService.findPedido(pedidoId);
 
       expect(result.id).toBe(pedidoId);
@@ -125,7 +125,7 @@ describe("PedidoService", () => {
       const pedidoRepository = new PedidoRepositoryMock();
       const pedidoService = new PedidoService(pedidoRepository);
       const pedidoId = uuidv4();
-      const pedidoEntity = buildPedidoDto(
+      const pedidoDto = buildPedidoDto(
         2.48,
         PedidoStatus.ABERTO,
         [{}],
@@ -134,7 +134,7 @@ describe("PedidoService", () => {
       );
       const newStatus = PedidoStatus.CANCELADO;
 
-      await pedidoService.createPedido(pedidoEntity);
+      await pedidoService.createPedido(pedidoDto);
       const result = await pedidoService.updatePedido(pedidoId, newStatus);
       const pedidoUpdated = await pedidoService.findPedido(result);
 
