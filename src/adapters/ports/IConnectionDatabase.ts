@@ -9,7 +9,8 @@ export interface IConnectionDatabase {
   disconnect(): Promise<void>;
   getConnection(): any;
 
-/*   listClients(): Promise<any>;
+  listPedidos(): Promise<any>;
+  /*   
   saveClient(newClient: ClientEntity): Promise<any>;
   getClientByCpf(cpf: string): Promise<any>;
 

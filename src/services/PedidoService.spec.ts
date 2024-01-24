@@ -100,7 +100,7 @@ describe("PedidoService", () => {
       const result = await pedidoService.listPedidos();
 
       expect(result).toEqual(expect.any(Array));
-      expect(result.length).toEqual(2);
+      expect((result as PedidoEntity[]).length).toEqual(2);
     });
 
     it("Deve encontrar um Pedido por pedidoId", async () => {
