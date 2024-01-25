@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { ListPedidosError } from "./errors/ListPedidosError";
 import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
 import { SavePedidoError } from "./errors/SavePedidoError";
+import { FindPedidoError } from "./errors/FindPedidoError";
 
 describe("PedidoRepository", () => {
   let connectionMock: IConnectionDatabase;
@@ -15,6 +16,7 @@ describe("PedidoRepository", () => {
       getConnection: jest.fn().mockResolvedValue({}),
       listPedidos: jest.fn().mockResolvedValue({}),
       savePedido: jest.fn().mockResolvedValue({}),
+      findPedidoById: jest.fn().mockResolvedValue({}),
     };
   });
 
@@ -105,6 +107,59 @@ describe("PedidoRepository", () => {
       ); 
       */
       expect(connectionMock.savePedido).toHaveBeenCalled();
+    });
+  });
+
+  describe("FindPedidoById", () => {
+    it("Deve buscar um pedido por id", async () => {
+      const pedidoId = uuidv4();
+      (connectionMock.findPedidoById as jest.Mock).mockImplementation(
+        async () => {
+          return {
+            id: pedidoId,
+            valor: 43,
+            status: "ABERTO",
+            itens: [
+              {
+                id: "980a67e5-3a3c-4b09-84b8-312f2cb8b2f4",
+                descricao: "Xis da Casa",
+                qtd: 2,
+                pedidoPropsId: "bca6364b-a0d7-470e-879f-745f0e001f7d",
+              },
+            ],
+            cliente: {
+              id: "a04440f2-ca62-4ece-abce-6a2de083bc85",
+              nome: "Rodrigo P Santos",
+              cpf: "11111111111",
+            },
+          };
+        }
+      );
+      const repository = new PedidoRepository(connectionMock);
+      const response = await repository.findPedidoById(pedidoId);
+
+      expect(response.id).toBe(pedidoId);
+    });
+
+    it("Deve retornar FindPedidoError quando ocorrer erro na busca por Id", async () => {
+      const pedidoId = uuidv4();
+      (connectionMock.findPedidoById as jest.Mock).mockRejectedValue(
+        new Error()
+      );
+      const repository = new PedidoRepository(connectionMock);
+      try {
+        await repository.findPedidoById(pedidoId);
+      } catch (error) {
+        expect(error).toBeInstanceOf(FindPedidoError);
+        expect(error.message).toBe("Erro ao buscar pedido por Id");
+      }
+      /**
+       *   Segunda maneira de validar a exception na expectativa de erro
+      await expect(repository.savePedido(newPedidoEntity)).rejects.toThrow(
+        "Erro ao salvar o pedido"
+      ); 
+      */
+      expect(connectionMock.findPedidoById).toHaveBeenCalled();
     });
   });
 });

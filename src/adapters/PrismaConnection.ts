@@ -58,6 +58,10 @@ export class PrismaConnection implements IConnectionDatabase {
     return pedidoData.id;
   }
 
+  async findPedidoById(pedidoId: string): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
+
   getConnection(): PrismaClient {
     return this.prisma;
   }

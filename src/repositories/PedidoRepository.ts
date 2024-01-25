@@ -3,6 +3,7 @@ import { IPedidoRepository } from "@adapters/ports/IPedidoRepository";
 import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
 import { ListPedidosError } from "./errors/ListPedidosError";
 import { SavePedidoError } from "./errors/SavePedidoError";
+import { FindPedidoError } from "./errors/FindPedidoError";
 
 export class PedidoRepository implements IPedidoRepository {
   constructor(private readonly connection: IConnectionDatabase) {}
@@ -33,8 +34,14 @@ export class PedidoRepository implements IPedidoRepository {
     }
   }
 
-  findPedidoById(pedidoId: any): Promise<PedidoEntity> {
-    throw new Error("Method not implemented.");
+  async findPedidoById(pedidoId: string): Promise<PedidoEntity> {
+    try {
+      const pedidoData = await this.connection.findPedidoById(pedidoId);
+      const pedidoEntity = this.pedidoEntityFacotry(pedidoData);
+      return pedidoEntity;
+    } catch (error) {
+      throw new FindPedidoError();
+    }
   }
   updatePedido(pedidoId: string, newStatus: PedidoStatus): Promise<string> {
     throw new Error("Method not implemented.");
