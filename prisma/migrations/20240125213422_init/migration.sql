@@ -1,9 +1,6 @@
 -- CreateEnum
 CREATE TYPE "StatusPedido" AS ENUM ('aberto', 'cancelado', 'aguardandoPagamento', 'pago', 'emPreparacao', 'pronto', 'entregue');
 
--- CreateEnum
-CREATE TYPE "TipoItem" AS ENUM ('bebida', 'lanche', 'opcional', 'sobremesa');
-
 -- CreateTable
 CREATE TABLE "PedidoProps" (
     "id" TEXT NOT NULL,
@@ -27,8 +24,6 @@ CREATE TABLE "Cliente" (
 CREATE TABLE "Item" (
     "id" TEXT NOT NULL,
     "descricao" TEXT NOT NULL,
-    "preco" DOUBLE PRECISION NOT NULL,
-    "tipo" "TipoItem" NOT NULL,
     "qtd" INTEGER NOT NULL,
     "pedidoPropsId" TEXT,
 
@@ -37,6 +32,9 @@ CREATE TABLE "Item" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Cliente_cpf_key" ON "Cliente"("cpf");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Item_descricao_key" ON "Item"("descricao");
 
 -- AddForeignKey
 ALTER TABLE "PedidoProps" ADD CONSTRAINT "PedidoProps_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Cliente"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -70,8 +70,6 @@ describe("PedidoService", () => {
           {
             descricao: "Xis da Casas",
             qtd: 1,
-            tipo: "lanche",
-            preco: 19.95,
           },
         ],
         { nome: "Rodrigo", cpf: "83888888888" },
@@ -93,8 +91,6 @@ describe("PedidoService", () => {
           {
             descricao: "Xis da Casas",
             qtd: 1,
-            tipo: "lanche",
-            preco: 19.95,
           },
         ],
         { nome: "Rodrigo", cpf: "83888888888" },
@@ -107,8 +103,6 @@ describe("PedidoService", () => {
           {
             descricao: "Xis da Casas",
             qtd: 1,
-            tipo: "lanche",
-            preco: 19.95,
           },
         ],
         { nome: "Mariana", cpf: "737333333344" },
@@ -135,8 +129,6 @@ describe("PedidoService", () => {
           {
             descricao: "Xis da Casas",
             qtd: 1,
-            tipo: "lanche",
-            preco: 19.95,
           },
         ],
         { nome: "Rodrigo", cpf: "83888888888" },
@@ -160,8 +152,6 @@ describe("PedidoService", () => {
           {
             descricao: "Xis da Casas",
             qtd: 1,
-            tipo: "lanche",
-            preco: 19.95,
           },
         ],
         { nome: "Rodrigo", cpf: "83888888888" },
@@ -184,8 +174,6 @@ const buildPedidoDto = (
   itens: [
     {
       descricao: string;
-      preco: number;
-      tipo: "bebida" | "lanche" | "opcional" | "sobremesa";
       qtd: number;
     }
   ],

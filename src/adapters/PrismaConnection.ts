@@ -1,8 +1,4 @@
-import {
-  PrismaClient as BasePrismaClient,
-  StatusPedido,
-  TipoItem,
-} from "@prisma/client";
+import { PrismaClient as BasePrismaClient, StatusPedido } from "@prisma/client";
 import { IConnectionDatabase } from "@adapters/ports/IConnectionDatabase";
 import { PedidoEntity } from "@src/entities/PedidoEntity";
 
@@ -18,7 +14,12 @@ export class PrismaConnection implements IConnectionDatabase {
   }
 
   async listPedidos(): Promise<any> {
-    const pedidosData = await this.prisma.pedidoProps.findMany();
+    const pedidosData = await this.prisma.pedidoProps.findMany({
+      include: {
+        cliente: true,
+        itens: true,
+      },
+    });
     return pedidosData;
   }
 
@@ -40,10 +41,8 @@ export class PrismaConnection implements IConnectionDatabase {
           connectOrCreate: newPedido.itens.map((item) => ({
             where: { descricao: item.descricao },
             create: {
-              preco: item.valor,
               descricao: item.descricao,
               qtd: item.qtd,
-              tipo: TipoItem.bebida,
             },
           })),
           /* create: newPedido.itens.map((item) => ({

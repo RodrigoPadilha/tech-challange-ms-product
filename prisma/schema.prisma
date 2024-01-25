@@ -28,10 +28,8 @@ model Cliente {
 }
 
 model Item {
-  id        String   @id @default(uuid())
-  descricao String   @unique
-  preco     Float
-  tipo      TipoItem
+  id        String @id @default(uuid())
+  descricao String @unique
   qtd       Int
 
   pedidoPropsId String?
@@ -46,11 +44,4 @@ enum StatusPedido {
   emPreparacao
   pronto
   entregue
-}
-
-enum TipoItem {
-  bebida
-  lanche
-  opcional
-  sobremesa
 }
