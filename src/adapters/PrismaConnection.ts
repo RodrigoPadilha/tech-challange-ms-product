@@ -38,19 +38,10 @@ export class PrismaConnection implements IConnectionDatabase {
           },
         },
         itens: {
-          connectOrCreate: newPedido.itens.map((item) => ({
-            where: { descricao: item.descricao },
-            create: {
-              descricao: item.descricao,
-              qtd: item.qtd,
-            },
-          })),
-          /* create: newPedido.itens.map((item) => ({
-            preco: item.valor,
+          create: newPedido.itens.map((item) => ({
             descricao: item.descricao,
             qtd: item.qtd,
-            tipo: TipoItem.bebida,
-          })), */
+          })),
         },
       },
     });
@@ -59,7 +50,14 @@ export class PrismaConnection implements IConnectionDatabase {
   }
 
   async findPedidoById(pedidoId: string): Promise<any> {
-    throw new Error("Method not implemented.");
+    const pedidoData = await this.prisma.pedidoProps.findUnique({
+      where: { id: pedidoId },
+      include: {
+        cliente: true,
+        itens: true,
+      },
+    });
+    return pedidoData;
   }
 
   getConnection(): PrismaClient {

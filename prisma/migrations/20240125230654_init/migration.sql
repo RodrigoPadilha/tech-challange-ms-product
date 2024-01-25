@@ -33,9 +33,6 @@ CREATE TABLE "Item" (
 -- CreateIndex
 CREATE UNIQUE INDEX "Cliente_cpf_key" ON "Cliente"("cpf");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Item_descricao_key" ON "Item"("descricao");
-
 -- AddForeignKey
 ALTER TABLE "PedidoProps" ADD CONSTRAINT "PedidoProps_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Cliente"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 

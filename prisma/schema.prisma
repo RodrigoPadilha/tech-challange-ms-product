@@ -29,7 +29,7 @@ model Cliente {
 
 model Item {
   id        String @id @default(uuid())
-  descricao String @unique
+  descricao String
   qtd       Int
 
   pedidoPropsId String?
