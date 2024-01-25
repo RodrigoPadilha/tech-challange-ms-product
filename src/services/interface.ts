@@ -4,7 +4,14 @@ export class PedidoDto {
   constructor(
     readonly valor: number,
     readonly status: PedidoStatus,
-    readonly itens: [{}],
+    readonly itens: [
+      {
+        descricao: string;
+        preco: number;
+        tipo: "bebida" | "lanche" | "opcional" | "sobremesa";
+        qtd: number;
+      }
+    ],
     readonly cliente: { nome: string; cpf: string },
     readonly id?: string
   ) {}

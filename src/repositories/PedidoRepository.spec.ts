@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { ListPedidosError } from "./errors/ListPedidosError";
 import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
 import { SavePedidoError } from "./errors/SavePedidoError";
+import { ItemTipo } from "@src/entities/ItemEntity";
 
 describe("PedidoRepository", () => {
   let connectionMock: IConnectionDatabase;
@@ -54,7 +55,14 @@ describe("PedidoRepository", () => {
     const newPedidoEntity: PedidoEntity = {
       valor: 1.99,
       status: PedidoStatus.ABERTO,
-      itens: [{}],
+      itens: [
+        {
+          descricao: "Xis da Casas",
+          qtd: 1,
+          tipo: ItemTipo.LANCHE,
+          valor: 19.95,
+        },
+      ],
       cliente: { cpf: "", nome: "" },
       id: pedidoId,
     };
@@ -72,7 +80,14 @@ describe("PedidoRepository", () => {
     const newPedidoEntity: PedidoEntity = {
       valor: 1.99,
       status: PedidoStatus.ABERTO,
-      itens: [{}],
+      itens: [
+        {
+          descricao: "Xis da Casas",
+          qtd: 1,
+          tipo: ItemTipo.LANCHE,
+          valor: 19.95,
+        },
+      ],
       cliente: { cpf: "", nome: "" },
       id: uuidv4(),
     };

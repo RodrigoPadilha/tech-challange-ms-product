@@ -1,3 +1,5 @@
+import { ItemEntity } from "./ItemEntity";
+
 export enum PedidoStatus {
   ABERTO = "aberto",
   CANCELADO = "cancelado",
@@ -7,11 +9,12 @@ export enum PedidoStatus {
   PRONTO = "pronto",
   ENTREGUE = "entregue",
 }
+
 export class PedidoEntity {
   constructor(
     readonly valor: number,
     readonly status: PedidoStatus,
-    readonly itens: [{}],
+    readonly itens: ItemEntity[],
     readonly cliente: { nome: string; cpf: string },
     readonly id?: string
   ) {}

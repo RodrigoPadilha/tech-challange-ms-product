@@ -1,15 +1,10 @@
-import { PrismaClient as BasePrismaClient } from "@prisma/client";
-import { IConnectionDatabase } from "@adapters/ports/IConnectionDatabase";
-/* import {
-  OrderStatus as OrderStatusPrisma,
-  Category as CategoryPrisma,
+import {
+  PrismaClient as BasePrismaClient,
+  StatusPedido,
+  TipoItem,
 } from "@prisma/client";
-
-import { ClientEntity } from "@application/entities/ClientEntity";
-import { OrderEntity } from "@application/entities/OrderEntity";
-import { OrderFilter } from "@application/usecases/ports/IOrderDao";
-import { ProductEntity } from "@application/entities/ProductEntity";
-import { ProductFilter } from "@application/usecases/ports/IProductDao"; */
+import { IConnectionDatabase } from "@adapters/ports/IConnectionDatabase";
+import { PedidoEntity } from "@src/entities/PedidoEntity";
 
 export class PrismaClient extends BasePrismaClient {
   // Aqui você pode adicionar métodos personalizados ou personalizar o comportamento do PrismaClient, se necessário
@@ -20,6 +15,48 @@ export class PrismaConnection implements IConnectionDatabase {
 
   constructor() {
     this.prisma = new PrismaClient();
+  }
+
+  async listPedidos(): Promise<any> {
+    const pedidosData = await this.prisma.pedidoProps.findMany();
+    return pedidosData;
+  }
+
+  async savePedido(newPedido: PedidoEntity): Promise<any> {
+    const pedidoData = await this.prisma.pedidoProps.create({
+      data: {
+        status: StatusPedido[newPedido.status] as StatusPedido,
+        valor: newPedido.valor,
+        cliente: {
+          connectOrCreate: {
+            where: { cpf: newPedido.cliente.cpf },
+            create: {
+              nome: newPedido.cliente.nome,
+              cpf: newPedido.cliente.cpf,
+            },
+          },
+        },
+        itens: {
+          connectOrCreate: newPedido.itens.map((item) => ({
+            where: { descricao: item.descricao },
+            create: {
+              preco: item.valor,
+              descricao: item.descricao,
+              qtd: item.qtd,
+              tipo: TipoItem.bebida,
+            },
+          })),
+          /* create: newPedido.itens.map((item) => ({
+            preco: item.valor,
+            descricao: item.descricao,
+            qtd: item.qtd,
+            tipo: TipoItem.bebida,
+          })), */
+        },
+      },
+    });
+
+    return pedidoData.id;
   }
 
   getConnection(): PrismaClient {
@@ -35,6 +72,4 @@ export class PrismaConnection implements IConnectionDatabase {
     // Lógica para desconectar do banco de dados
     await this.prisma.$disconnect();
   }
-
-  
 }

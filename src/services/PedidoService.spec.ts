@@ -66,7 +66,14 @@ describe("PedidoService", () => {
       const pedidoDto = buildPedidoDto(
         2.48,
         PedidoStatus.ABERTO,
-        [{}],
+        [
+          {
+            descricao: "Xis da Casas",
+            qtd: 1,
+            tipo: "lanche",
+            preco: 19.95,
+          },
+        ],
         { nome: "Rodrigo", cpf: "83888888888" },
         pedidoId
       );
@@ -82,14 +89,28 @@ describe("PedidoService", () => {
       const pedidoDto_1 = buildPedidoDto(
         2.48,
         PedidoStatus.ABERTO,
-        [{}],
+        [
+          {
+            descricao: "Xis da Casas",
+            qtd: 1,
+            tipo: "lanche",
+            preco: 19.95,
+          },
+        ],
         { nome: "Rodrigo", cpf: "83888888888" },
         uuidv4()
       );
       const pedidoDto_2 = buildPedidoDto(
         35.48,
         PedidoStatus.ABERTO,
-        [{}],
+        [
+          {
+            descricao: "Xis da Casas",
+            qtd: 1,
+            tipo: "lanche",
+            preco: 19.95,
+          },
+        ],
         { nome: "Mariana", cpf: "737333333344" },
         uuidv4()
       );
@@ -110,7 +131,14 @@ describe("PedidoService", () => {
       const pedidoDto = buildPedidoDto(
         2.48,
         PedidoStatus.ABERTO,
-        [{}],
+        [
+          {
+            descricao: "Xis da Casas",
+            qtd: 1,
+            tipo: "lanche",
+            preco: 19.95,
+          },
+        ],
         { nome: "Rodrigo", cpf: "83888888888" },
         pedidoId
       );
@@ -128,7 +156,14 @@ describe("PedidoService", () => {
       const pedidoDto = buildPedidoDto(
         2.48,
         PedidoStatus.ABERTO,
-        [{}],
+        [
+          {
+            descricao: "Xis da Casas",
+            qtd: 1,
+            tipo: "lanche",
+            preco: 19.95,
+          },
+        ],
         { nome: "Rodrigo", cpf: "83888888888" },
         pedidoId
       );
@@ -146,7 +181,14 @@ describe("PedidoService", () => {
 const buildPedidoDto = (
   valor: number,
   status: PedidoStatus,
-  itens: [{}],
+  itens: [
+    {
+      descricao: string;
+      preco: number;
+      tipo: "bebida" | "lanche" | "opcional" | "sobremesa";
+      qtd: number;
+    }
+  ],
   cliente: { nome: string; cpf: string },
   id: string
 ): PedidoDto => new PedidoDto(valor, status, itens, cliente, id);

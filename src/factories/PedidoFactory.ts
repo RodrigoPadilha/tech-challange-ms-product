@@ -11,7 +11,7 @@ export class PedidoFactory {
     private readonly httpServer: IHttpServer,
     private readonly connection: IConnectionDatabase
   ) {
-    const pedidoRepository = new PedidoRepository();
+    const pedidoRepository = new PedidoRepository(this.connection);
     const pedidoService = new PedidoService(pedidoRepository);
     this.pedidoController = new PedidoController(
       this.httpServer,

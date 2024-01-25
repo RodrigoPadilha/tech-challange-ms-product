@@ -1,6 +1,7 @@
 import { IPedidoRepository } from "@adapters/ports/IPedidoRepository";
 import { PedidoDto } from "./interface";
 import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
+import { ItemTipo } from "@src/entities/ItemEntity";
 
 export class PedidoService {
   constructor(private readonly repository: IPedidoRepository) {}
@@ -12,7 +13,19 @@ export class PedidoService {
 
   async createPedido(pedidoDto: PedidoDto) {
     const { id, cliente, itens, status, valor } = pedidoDto;
-    const pedidoEntity = new PedidoEntity(valor, status, itens, cliente, id);
+    const itensParsed = itens.map((iten) => ({
+      descricao: iten.descricao,
+      valor: iten.preco,
+      tipo: ItemTipo[iten.tipo as keyof typeof ItemTipo], //ItemTipo.BEBIDA,
+      qtd: iten.qtd,
+    }));
+    const pedidoEntity = new PedidoEntity(
+      valor,
+      status,
+      itensParsed,
+      cliente,
+      id
+    );
     const result = await this.repository.savePedido(pedidoEntity);
     return result;
   }

@@ -6,5 +6,5 @@ export interface IConnectionDatabase {
   getConnection(): any;
 
   listPedidos(): Promise<any>;
-  savePedido(nwePedido: PedidoEntity): Promise<any>;
+  savePedido(newPedido: PedidoEntity): Promise<any>;
 }

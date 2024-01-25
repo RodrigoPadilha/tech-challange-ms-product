@@ -3,8 +3,10 @@ import { PedidoController } from "./PedidoController";
 import IHttpServer from "@adapters/ports/IHttpServer";
 import { PedidoService } from "@src/services/PedidoService";
 import { badRequest, serverError } from "@src/util/http-helper";
-import { v4 as uuidv4 } from "uuid";
 import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
+import { ItemEntity, ItemTipo } from "@src/entities/ItemEntity";
+import { v4 as uuidv4 } from "uuid";
+import { PedidoDto } from "@src/services/interface";
 
 describe("PedidoController", () => {
   let httpServer: IHttpServer;
@@ -114,11 +116,31 @@ describe("PedidoController", () => {
   describe("Request CreatePedidosController", () => {
     it("Should return status 201 when create pedidos is called with Successful", async () => {
       const { mockParams, mockBody, mockQuery } = registerControllerParams;
+      const pedidoDto = buildPedidoDto(
+        2.48,
+        PedidoStatus.ABERTO,
+        [
+          {
+            descricao: "Xis da Casas",
+            qtd: 1,
+            tipo: "lanche",
+            preco: 19.95,
+          },
+        ],
+        { nome: "Rodrigo", cpf: "83888888888" },
+        uuidv4()
+      );
+      mockBody["valor"] = pedidoDto.valor;
+      mockBody["status"] = pedidoDto.status;
+      mockBody["itens"] = pedidoDto.itens;
+      mockBody["cliente"] = pedidoDto.cliente;
+      mockBody["id"] = pedidoDto.id;
 
       pedidoController.registerEndpointCreatePedido();
       // Chama a função passada como argumento diretamente
       const handler = (httpServer.register as jest.Mock).mock.calls[0][2];
       const result = await handler(mockParams, mockBody, mockQuery);
+      const mockPedidoService = jest.spyOn(pedidoService, "createPedido");
 
       expect(result.statusCode).toBe(201);
       expect(result.body.message).toBe("Retorno OK");
@@ -150,7 +172,14 @@ describe("PedidoController", () => {
         buildPedidoEntity(
           1.99,
           PedidoStatus.ABERTO,
-          [{}],
+          [
+            {
+              descricao: "Xis da Casas",
+              qtd: 1,
+              tipo: ItemTipo.LANCHE,
+              valor: 19.95,
+            },
+          ],
           {
             nome: "Any_name",
             cpf: "Any_cpf",
@@ -257,7 +286,22 @@ describe("PedidoController", () => {
 const buildPedidoEntity = (
   valor: number,
   status: PedidoStatus,
-  itens: [{}],
+  itens: ItemEntity[],
   cliente: { nome: string; cpf: string },
   id: string
 ): PedidoEntity => new PedidoEntity(valor, status, itens, cliente, id);
+
+const buildPedidoDto = (
+  valor: number,
+  status: PedidoStatus,
+  itens: [
+    {
+      descricao: string;
+      preco: number;
+      tipo: "bebida" | "lanche" | "opcional" | "sobremesa";
+      qtd: number;
+    }
+  ],
+  cliente: { nome: string; cpf: string },
+  id: string
+): PedidoDto => new PedidoDto(valor, status, itens, cliente, id);
