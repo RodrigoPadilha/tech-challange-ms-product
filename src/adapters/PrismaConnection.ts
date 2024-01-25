@@ -14,7 +14,12 @@ export class PrismaConnection implements IConnectionDatabase {
   }
 
   async listPedidos(): Promise<any> {
-    const pedidosData = await this.prisma.pedidoProps.findMany();
+    const pedidosData = await this.prisma.pedidoProps.findMany({
+      include: {
+        cliente: true,
+        itens: true,
+      },
+    });
     return pedidosData;
   }
 
