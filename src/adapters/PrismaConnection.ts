@@ -1,6 +1,6 @@
 import { PrismaClient as BasePrismaClient, StatusPedido } from "@prisma/client";
 import { IConnectionDatabase } from "@adapters/ports/IConnectionDatabase";
-import { PedidoEntity } from "@src/entities/PedidoEntity";
+import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
 
 export class PrismaClient extends BasePrismaClient {
   // Aqui você pode adicionar métodos personalizados ou personalizar o comportamento do PrismaClient, se necessário
@@ -56,6 +56,16 @@ export class PrismaConnection implements IConnectionDatabase {
         cliente: true,
         itens: true,
       },
+    });
+    return pedidoData;
+  }
+
+  async updatePedido(pedidoId: string, newStatus: PedidoStatus): Promise<any> {
+    const pedidoData = await this.prisma.pedidoProps.update({
+      data: {
+        status: StatusPedido[newStatus] as StatusPedido,
+      },
+      where: { id: pedidoId },
     });
     return pedidoData;
   }
