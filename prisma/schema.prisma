@@ -23,13 +23,13 @@ model PedidoProps {
 model Cliente {
   id          String        @id @default(uuid())
   nome        String
-  cpf         String
+  cpf         String        @unique @default(uuid())
   PedidoProps PedidoProps[]
 }
 
 model Item {
   id        String   @id @default(uuid())
-  descricao String
+  descricao String   @unique
   preco     Float
   tipo      TipoItem
   qtd       Int

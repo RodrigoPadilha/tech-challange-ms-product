@@ -7,8 +7,8 @@ CREATE TYPE "TipoItem" AS ENUM ('bebida', 'lanche', 'opcional', 'sobremesa');
 -- CreateTable
 CREATE TABLE "PedidoProps" (
     "id" TEXT NOT NULL,
-    "status" "StatusPedido" NOT NULL,
     "valor" DOUBLE PRECISION NOT NULL,
+    "status" "StatusPedido" NOT NULL,
     "clienteId" TEXT NOT NULL,
 
     CONSTRAINT "PedidoProps_pkey" PRIMARY KEY ("id")
@@ -18,7 +18,6 @@ CREATE TABLE "PedidoProps" (
 CREATE TABLE "Cliente" (
     "id" TEXT NOT NULL,
     "nome" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
     "cpf" TEXT NOT NULL,
 
     CONSTRAINT "Cliente_pkey" PRIMARY KEY ("id")
@@ -27,14 +26,17 @@ CREATE TABLE "Cliente" (
 -- CreateTable
 CREATE TABLE "Item" (
     "id" TEXT NOT NULL,
-    "tipo" "TipoItem" NOT NULL,
     "descricao" TEXT NOT NULL,
-    "aceitaOpcional" BOOLEAN NOT NULL,
     "preco" DOUBLE PRECISION NOT NULL,
+    "tipo" "TipoItem" NOT NULL,
+    "qtd" INTEGER NOT NULL,
     "pedidoPropsId" TEXT,
 
     CONSTRAINT "Item_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Cliente_cpf_key" ON "Cliente"("cpf");
 
 -- AddForeignKey
 ALTER TABLE "PedidoProps" ADD CONSTRAINT "PedidoProps_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Cliente"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
