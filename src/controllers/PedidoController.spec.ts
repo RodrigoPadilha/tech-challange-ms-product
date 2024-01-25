@@ -123,8 +123,6 @@ describe("PedidoController", () => {
           {
             descricao: "Xis da Casas",
             qtd: 1,
-            tipo: "lanche",
-            preco: 19.95,
           },
         ],
         { nome: "Rodrigo", cpf: "83888888888" },
@@ -176,8 +174,6 @@ describe("PedidoController", () => {
             {
               descricao: "Xis da Casas",
               qtd: 1,
-              tipo: ItemTipo.LANCHE,
-              valor: 19.95,
             },
           ],
           {
@@ -297,8 +293,6 @@ const buildPedidoDto = (
   itens: [
     {
       descricao: string;
-      preco: number;
-      tipo: "bebida" | "lanche" | "opcional" | "sobremesa";
       qtd: number;
     }
   ],

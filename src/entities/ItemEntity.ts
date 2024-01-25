@@ -7,7 +7,5 @@ export enum ItemTipo {
 
 export class ItemEntity {
   descricao: string;
-  valor: number;
-  tipo: ItemTipo;
   qtd: number;
 }

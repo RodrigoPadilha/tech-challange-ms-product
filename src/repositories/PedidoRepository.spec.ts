@@ -59,8 +59,6 @@ describe("PedidoRepository", () => {
         {
           descricao: "Xis da Casas",
           qtd: 1,
-          tipo: ItemTipo.LANCHE,
-          valor: 19.95,
         },
       ],
       cliente: { cpf: "", nome: "" },
@@ -84,8 +82,6 @@ describe("PedidoRepository", () => {
         {
           descricao: "Xis da Casas",
           qtd: 1,
-          tipo: ItemTipo.LANCHE,
-          valor: 19.95,
         },
       ],
       cliente: { cpf: "", nome: "" },

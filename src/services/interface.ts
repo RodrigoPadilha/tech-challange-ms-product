@@ -7,8 +7,6 @@ export class PedidoDto {
     readonly itens: [
       {
         descricao: string;
-        preco: number;
-        tipo: "bebida" | "lanche" | "opcional" | "sobremesa";
         qtd: number;
       }
     ],

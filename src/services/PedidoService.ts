@@ -15,8 +15,6 @@ export class PedidoService {
     const { id, cliente, itens, status, valor } = pedidoDto;
     const itensParsed = itens.map((iten) => ({
       descricao: iten.descricao,
-      valor: iten.preco,
-      tipo: ItemTipo[iten.tipo as keyof typeof ItemTipo], //ItemTipo.BEBIDA,
       qtd: iten.qtd,
     }));
     const pedidoEntity = new PedidoEntity(
