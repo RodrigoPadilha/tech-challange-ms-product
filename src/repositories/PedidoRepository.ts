@@ -2,6 +2,7 @@ import { IConnectionDatabase } from "@adapters/ports/IConnectionDatabase";
 import { IPedidoRepository } from "@adapters/ports/IPedidoRepository";
 import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
 import { ListPedidosError } from "./errors/ListPedidosError";
+import { SavePedidoError } from "./errors/SavePedidoError";
 
 export class PedidoRepository implements IPedidoRepository {
   constructor(private readonly connection: IConnectionDatabase) {}
@@ -15,15 +16,23 @@ export class PedidoRepository implements IPedidoRepository {
 
       return pedidosEntities;
     } catch (error) {
-      console.log("==> Err:", error);
+      console.log("==> Err: listAllPedidos", error);
       throw new ListPedidosError(error);
     } finally {
       await this.connection.disconnect();
     }
   }
-  savePedido(novoPedido: PedidoEntity): Promise<string> {
-    throw new Error("Method not implemented.");
+
+  async savePedido(novoPedido: PedidoEntity): Promise<string> {
+    try {
+      const pedidoId = await this.connection.savePedido(novoPedido);
+      return pedidoId;
+    } catch (error) {
+      console.log("==> Err: savePedido", error);
+      throw new SavePedidoError();
+    }
   }
+
   findPedidoById(pedidoId: any): Promise<PedidoEntity> {
     throw new Error("Method not implemented.");
   }

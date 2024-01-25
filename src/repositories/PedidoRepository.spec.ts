@@ -2,7 +2,8 @@ import { IConnectionDatabase } from "@adapters/ports/IConnectionDatabase";
 import { PedidoRepository } from "./PedidoRepository";
 import { v4 as uuidv4 } from "uuid";
 import { ListPedidosError } from "./errors/ListPedidosError";
-import { PedidoEntity } from "@src/entities/PedidoEntity";
+import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
+import { SavePedidoError } from "./errors/SavePedidoError";
 
 describe("PedidoRepository", () => {
   let connectionMock: IConnectionDatabase;
@@ -13,6 +14,7 @@ describe("PedidoRepository", () => {
       disconnect: jest.fn(),
       getConnection: jest.fn().mockResolvedValue({}),
       listPedidos: jest.fn().mockResolvedValue({}),
+      savePedido: jest.fn().mockResolvedValue({}),
     };
   });
   it("Deve retornar lista de pedidos com sucesso", async () => {
@@ -34,7 +36,7 @@ describe("PedidoRepository", () => {
     expect((result as [PedidoEntity]).length).toBe(1);
   });
 
-  it("Deve retornar erro ListPedidosError quando ocorrer erro na busca", async () => {
+  it("Deve retornar ListPedidosError quando ocorrer erro na busca", async () => {
     (connectionMock.listPedidos as jest.Mock).mockRejectedValue(
       new ListPedidosError("Erro ao listar pedidos")
     );
@@ -45,13 +47,49 @@ describe("PedidoRepository", () => {
       "Erro ao listar pedidos"
     );
     expect(connectionMock.listPedidos).toHaveBeenCalled();
+  });
 
-    /* 
+  it("Deve incluir pedido com sucesso", async () => {
+    const pedidoId = uuidv4();
+    const newPedidoEntity: PedidoEntity = {
+      valor: 1.99,
+      status: PedidoStatus.ABERTO,
+      itens: [{}],
+      cliente: { cpf: "", nome: "" },
+      id: pedidoId,
+    };
+    (connectionMock.savePedido as jest.Mock).mockImplementation(async () => {
+      return pedidoId;
+    });
+    const repository = new PedidoRepository(connectionMock);
 
-    const result = await repository.listAllPedidos();
+    const response = await repository.savePedido(newPedidoEntity);
 
-    expect((result as unknown as ListPedidosError).name).toBe(
-      "ListPedidosError"
-    ); */
+    expect(response).toBe(pedidoId);
+  });
+
+  it("Deve retornar SavePedidoError quando ocorrer erro ao salvar pedido", async () => {
+    const newPedidoEntity: PedidoEntity = {
+      valor: 1.99,
+      status: PedidoStatus.ABERTO,
+      itens: [{}],
+      cliente: { cpf: "", nome: "" },
+      id: uuidv4(),
+    };
+    (connectionMock.savePedido as jest.Mock).mockRejectedValue(new Error());
+    const repository = new PedidoRepository(connectionMock);
+    try {
+      await repository.savePedido(newPedidoEntity);
+    } catch (error) {
+      expect(error).toBeInstanceOf(SavePedidoError);
+      expect(error.message).toBe("Erro ao salvar o pedido");
+    }
+    /**
+     *   Segunda maneira de validar a exception na expectativa de erro
+    await expect(repository.savePedido(newPedidoEntity)).rejects.toThrow(
+      "Erro ao salvar o pedido"
+    ); 
+    */
+    expect(connectionMock.savePedido).toHaveBeenCalled();
   });
 });
