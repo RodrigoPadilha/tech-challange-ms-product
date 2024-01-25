@@ -14,7 +14,7 @@
     "init": "npm run migrate:deploy && npm run generate && npm run dev",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:watch": "jest --passWithNoTests --runInBand --watch",
-    "test-verbose": "jest --passWithNoTests --runInBand",
+    "test-verbose": "jest --passWithNoTests --runInBand --verbose",
     "test-unit": "npm test -- --watch -c jest-unit-config.js",
     "test-integration": "npm test -- --watch -c jest-integration-config.js",
     "test-staged": "npm test -- --findRelatedTests",

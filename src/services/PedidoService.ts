@@ -1,7 +1,6 @@
 import { IPedidoRepository } from "@adapters/ports/IPedidoRepository";
 import { PedidoDto } from "./interface";
 import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
-import { ItemTipo } from "@src/entities/ItemEntity";
 
 export class PedidoService {
   constructor(private readonly repository: IPedidoRepository) {}

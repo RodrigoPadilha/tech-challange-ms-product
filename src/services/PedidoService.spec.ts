@@ -58,7 +58,7 @@ class PedidoRepositoryMock implements IPedidoRepository {
 describe("PedidoService", () => {
   beforeEach(() => {});
 
-  describe("Listar Pedidos", () => {
+  describe("CreatePedido", () => {
     it("Deve salvar novo pedido", async () => {
       const pedidoRepository = new PedidoRepositoryMock();
       const pedidoService = new PedidoService(pedidoRepository);
@@ -80,7 +80,8 @@ describe("PedidoService", () => {
 
       expect(result).toBe(pedidoId);
     });
-
+  });
+  describe("ListPedidos", () => {
     it("Deve retornar lista de pedidos", async () => {
       const pedidoRepository = new PedidoRepositoryMock();
       const pedidoService = new PedidoService(pedidoRepository);
@@ -117,7 +118,9 @@ describe("PedidoService", () => {
       expect(result).toEqual(expect.any(Array));
       expect((result as PedidoEntity[]).length).toEqual(2);
     });
+  });
 
+  describe("FindPedido", () => {
     it("Deve encontrar um Pedido por pedidoId", async () => {
       const pedidoRepository = new PedidoRepositoryMock();
       const pedidoService = new PedidoService(pedidoRepository);
@@ -140,7 +143,8 @@ describe("PedidoService", () => {
 
       expect(result.id).toBe(pedidoId);
     });
-
+  });
+  describe("UpdatePedido", () => {
     it("Deve atualizar status do pedido", async () => {
       const pedidoRepository = new PedidoRepositoryMock();
       const pedidoService = new PedidoService(pedidoRepository);

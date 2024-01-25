@@ -4,7 +4,7 @@ import IHttpServer from "@adapters/ports/IHttpServer";
 import { PedidoService } from "@src/services/PedidoService";
 import { badRequest, serverError } from "@src/util/http-helper";
 import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
-import { ItemEntity, ItemTipo } from "@src/entities/ItemEntity";
+import { ItemEntity } from "@src/entities/ItemEntity";
 import { v4 as uuidv4 } from "uuid";
 import { PedidoDto } from "@src/services/interface";
 
