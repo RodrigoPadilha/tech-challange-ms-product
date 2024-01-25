@@ -5,6 +5,7 @@ import { ListPedidosError } from "./errors/ListPedidosError";
 import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
 import { SavePedidoError } from "./errors/SavePedidoError";
 import { FindPedidoError } from "./errors/FindPedidoError";
+import { UpdatePedidoError } from "./errors/UpdatePedidoError";
 
 describe("PedidoRepository", () => {
   let connectionMock: IConnectionDatabase;
@@ -17,6 +18,7 @@ describe("PedidoRepository", () => {
       listPedidos: jest.fn().mockResolvedValue({}),
       savePedido: jest.fn().mockResolvedValue({}),
       findPedidoById: jest.fn().mockResolvedValue({}),
+      updatePedido: jest.fn().mockResolvedValue({}),
     };
   });
 
@@ -160,6 +162,38 @@ describe("PedidoRepository", () => {
       ); 
       */
       expect(connectionMock.findPedidoById).toHaveBeenCalled();
+    });
+  });
+
+  describe("UpdatePedido", () => {
+    it("Deve retornar UpdatePedidoError quando ocorrer erro na atualiza≤cão do status do pedido", async () => {
+      const pedidoId = uuidv4();
+      const newStatus = PedidoStatus.AGUARDANDO_PAGAMENTO;
+      (connectionMock.updatePedido as jest.Mock).mockImplementation(
+        async () => {
+          return { id: pedidoId, status: newStatus };
+        }
+      );
+      const repository = new PedidoRepository(connectionMock);
+
+      const response = await repository.updatePedido(pedidoId, newStatus);
+
+      expect(response).toBe(pedidoId);
+    });
+
+    it("Deve atualizar o status de um pedido", async () => {
+      const pedidoId = uuidv4();
+      const newStatus = PedidoStatus.AGUARDANDO_PAGAMENTO;
+      (connectionMock.updatePedido as jest.Mock).mockRejectedValue(new Error());
+
+      const repository = new PedidoRepository(connectionMock);
+      try {
+        await repository.updatePedido(pedidoId, newStatus);
+      } catch (error) {
+        expect(error).toBeInstanceOf(UpdatePedidoError);
+        expect(error.message).toBe("Erro ao atualizar o pedido");
+      }
+      expect(connectionMock.updatePedido).toHaveBeenCalled();
     });
   });
 });

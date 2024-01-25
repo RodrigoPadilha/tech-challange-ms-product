@@ -1,4 +1,4 @@
-import { PedidoEntity } from "@src/entities/PedidoEntity";
+import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
 
 export interface IConnectionDatabase {
   connect(): Promise<void>;
@@ -8,4 +8,5 @@ export interface IConnectionDatabase {
   listPedidos(): Promise<any>;
   savePedido(newPedido: PedidoEntity): Promise<any>;
   findPedidoById(pedidoId: string): Promise<any>;
+  updatePedido(pedidoId: string, newStatus: PedidoStatus): Promise<any>;
 }

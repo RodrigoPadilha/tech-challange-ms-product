@@ -4,6 +4,7 @@ import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
 import { ListPedidosError } from "./errors/ListPedidosError";
 import { SavePedidoError } from "./errors/SavePedidoError";
 import { FindPedidoError } from "./errors/FindPedidoError";
+import { UpdatePedidoError } from "./errors/UpdatePedidoError";
 
 export class PedidoRepository implements IPedidoRepository {
   constructor(private readonly connection: IConnectionDatabase) {}
@@ -43,8 +44,20 @@ export class PedidoRepository implements IPedidoRepository {
       throw new FindPedidoError();
     }
   }
-  updatePedido(pedidoId: string, newStatus: PedidoStatus): Promise<string> {
-    throw new Error("Method not implemented.");
+
+  async updatePedido(
+    pedidoId: string,
+    newStatus: PedidoStatus
+  ): Promise<string> {
+    try {
+      const pedidoData = await this.connection.updatePedido(
+        pedidoId,
+        newStatus
+      );
+      return pedidoData.id;
+    } catch (error) {
+      throw new UpdatePedidoError();
+    }
   }
 
   private pedidoEntityFacotry(dataEntity) {
