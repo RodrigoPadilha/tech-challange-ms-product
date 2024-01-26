@@ -81,7 +81,7 @@ export class PedidoController {
           if (!pedidoUpdated) {
             return badRequest({ message: "Pedido não encontrado" });
           }
-          return ok({ message: "Retorno OK", pedidoUpdated });
+          return ok({ message: "Retorno OK", pedido: pedidoUpdated });
         } catch (error) {
           return serverError(error);
         }
