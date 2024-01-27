@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db-ms-producao-pod
+  labels:
+    app: db-ms-producao
+spec:
+  containers:
+    - name: db-ms-producao-container
+      image: rodrigopadilhadossantos/db-ms-producao:1 # subir esse container
+      ports:
+        - containerPort: 5432
+      env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets
+              key: db_user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets
+              key: db_password
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets
+              key: db_name

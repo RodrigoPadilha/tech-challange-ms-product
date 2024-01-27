@@ -21,4 +21,7 @@ RUN npm run build
 EXPOSE 3000
 
 # Defina o comando de inicialização do container
+ENTRYPOINT ["npm", "run", "init"]
+
 CMD ["node", "dist/index.js"]
+#CMD npm run init && node dist/index.js

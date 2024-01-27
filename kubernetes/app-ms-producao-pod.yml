@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-ms-producao-pod
+  labels:
+    app: app-ms-producao
+spec:
+  containers:
+    - name: app-ms-producao-container
+      image: rodrigopadilhadossantos/app-ms-producao:2 # subir esse container
+      ports:
+        - containerPort: 3000
+      env:
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets
+              key: db_host
+        - name: DB_PORT
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets
+              key: db_port
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets
+              key: db_user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets
+              key: db_password
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets
+              key: db_name
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets
+              key: db_url
+    #            - name: DATABASE_URL
+    #              valueFrom:
+    #                configMapKeyRef:
+    #                  name: database-configmap
+    #                  key: db_url
