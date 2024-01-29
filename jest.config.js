@@ -33,7 +33,8 @@ const config = {
     '\\.config\\.',
     '^((?!src/).)*$',
     '^src/factories/',
-    '/node_modules/'
+    '/node_modules/',
+    'src/index\\.ts',
   ],
 
   // Indicates which provider should be used to instrument code for coverage

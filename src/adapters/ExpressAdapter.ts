@@ -6,7 +6,7 @@ import swaggerUi from "swagger-ui-express";
 import * as swaggerDocument from "@src/infra/docs/swagger.json";
 
 export class ExpressAdapter implements IHttpServer {
-  private app: Application;
+  app: Application;
   private server: Server;
 
   constructor() {
