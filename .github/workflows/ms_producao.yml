@@ -42,5 +42,5 @@ jobs:
 #          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   docker:
     needs: build
-    uses: ./.github/workflows/Docker.yml
+    uses: ./.github/workflows/docker.yml
     secrets: inherit
