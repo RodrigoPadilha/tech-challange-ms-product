@@ -24,6 +24,9 @@ describe("ExpressAdapter", () => {
 
   it.skip("should handle a custom route", async () => {
     // Example: Test a GET request to /custom-route
+    await expressAdapter.register("get", "/custom-route", () => {
+      return { custom: "response" };
+    });
     const response = await request(expressAdapter.app).get("/custom-route");
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ custom: "response" });
