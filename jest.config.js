@@ -32,6 +32,7 @@ const config = {
     '\\.test\\.',
     '\\.config\\.',
     '^((?!src/).)*$',
+    '^((?!src/factories/).)*$',
     '/node_modules/'
   ],
 
