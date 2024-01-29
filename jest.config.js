@@ -30,6 +30,7 @@ const config = {
   coveragePathIgnorePatterns: [
     '\\.spec\\.',
     '\\.test\\.',
+    '\\.config\\.',
     '^((?!src/).)*$',
     '/node_modules/'
   ],
