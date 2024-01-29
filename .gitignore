@@ -3,6 +3,6 @@ dist
 db
 coverage
 
-package-lock.json
+# package-lock.json
 
 .env
