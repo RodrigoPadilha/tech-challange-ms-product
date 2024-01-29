@@ -1,4 +1,4 @@
-name: Deploy MS Producao
+name: Testes de Qualidade - MS Producao
 
 on:
   workflow_dispatch:
