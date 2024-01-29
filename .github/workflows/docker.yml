@@ -7,13 +7,6 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Set Docker Counter
-        id: set_counter
-        run: echo "DOCKER_COUNTER=$(date +'%s')" >> $GITHUB_ENV
-      
-      - name: Print GITHUB_ENV
-        run: echo "===> ${{ env.DOCKER_COUNTER }}"
-
       - name: Checkout do código
         uses: actions/checkout@v3
 
