@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Set Docker Counter
         id: set_counter
-        run: echo "::set-output name=counter::${{ github.event.before }}"
+        run: echo "DOCKER_COUNTER=$(date +'%s')" >> $GITHUB_ENV
 
       - name: Checkout do código
         uses: actions/checkout@v3
