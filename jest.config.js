@@ -18,10 +18,10 @@ const config = {
   clearMocks: true,
 
   // Indicates whether the coverage information should be collected while executing the test
-  // collectCoverage: false,
+  collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  // collectCoverageFrom: undefined,
+  collectCoverageFrom: ['src/**/*.ts'],
 
   // The directory where Jest should output its coverage files
   // coverageDirectory: undefined,
@@ -32,7 +32,8 @@ const config = {
     '\\.test\\.',
     '\\.config\\.',
     '^((?!src/).)*$',
-    '^src/factories/',
+    //'^src/factories/',
+    '<rootDir>/src/factories/',
     '/node_modules/',
     'src/index\\.ts',
   ],
@@ -155,7 +156,7 @@ const config = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  // testEnvironment: "jest-environment-node",
+  testEnvironment: "node",
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
