@@ -53,7 +53,7 @@ jobs:
     #    uses: ./.github/workflows/docker.yml
     #    secrets: inherit
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged && github.event.pull_request.base.ref == 'main'
     steps:
       - name: Checkout do código
         uses: actions/checkout@v3
