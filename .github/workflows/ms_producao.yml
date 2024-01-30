@@ -11,6 +11,7 @@ on:
 
 jobs:
   tests:
+    name: Testes Automatizados
     runs-on: ubuntu-latest
 
     strategy:
@@ -33,6 +34,7 @@ jobs:
 
   sonarcloud:
     name: SonarCloud
+    needs: tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -49,11 +51,11 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   docker:
-    needs: tests
+    name: Deploy MS Producao
+    needs: sonarcloud
     #    uses: ./.github/workflows/docker.yml
     #    secrets: inherit
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged && github.event.pull_request.base.ref == 'main'
     steps:
       - name: Checkout do código
         uses: actions/checkout@v3
