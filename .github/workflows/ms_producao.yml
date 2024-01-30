@@ -49,6 +49,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  docker:
+    needs: sonarcloud
+      uses: ./.github/workflows/ms_producao_publish.yml
+      secrets: inherit
+
 #  docker:
 #    name: Deploy MS Producao
 #    needs: sonarcloud
