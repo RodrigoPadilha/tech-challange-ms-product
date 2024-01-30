@@ -3,9 +3,11 @@ name: Testes de Qualidade - MS Producao
 on:
 #  workflow_dispatch:  
   push:
-    branches: [ "main" ]
+    branches: 
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
