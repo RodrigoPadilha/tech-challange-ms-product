@@ -9,9 +9,6 @@ on:
 jobs:
   docker:
     name: Deploy MS Producao
-    needs: sonarcloud
-    #    uses: ./.github/workflows/docker.yml
-    #    secrets: inherit
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
