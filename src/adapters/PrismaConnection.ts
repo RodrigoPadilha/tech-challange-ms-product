@@ -83,4 +83,22 @@ export class PrismaConnection implements IConnectionDatabase {
     // Lógica para desconectar do banco de dados
     await this.prisma.$disconnect();
   }
+
+  async startTransaction() {
+    return null;
+  }
+
+  async commitTransaction(transaction?: any) {
+    if(!transaction) return;
+    return transaction?.commit();
+  }
+
+  async rollbackTransaction(transaction?: any) {
+    if(!transaction) return;
+    return transaction?.rollback() 
+  }
+
+  async inTransaction(transaction: any, callback: () => Promise<any>) {
+    return this.prisma.$transaction(callback);
+  }
 }

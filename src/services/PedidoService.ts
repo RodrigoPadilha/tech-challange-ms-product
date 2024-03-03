@@ -6,25 +6,44 @@ export class PedidoService {
   constructor(private readonly repository: IPedidoRepository) {}
 
   async listPedidos() {
-    const result = await this.repository.listAllPedidos();
-    return result;
+    let result: any;
+    const transaction = await this.repository.startTransaction();
+    try {
+      await this.repository.inTransaction(transaction, async () => {
+        result = await this.repository.listAllPedidos();
+      });
+      await this.repository.commitTransaction(transaction);
+      return result;
+    } catch (error) {
+      await this.repository.rollbackTransaction(transaction);
+      throw error;
+    }
   }
 
   async createPedido(pedidoDto: PedidoDto) {
-    const { id, cliente, itens, status, valor } = pedidoDto;
-    const itensParsed = itens.map((iten) => ({
-      descricao: iten.descricao,
-      qtd: iten.qtd,
-    }));
-    const pedidoEntity = new PedidoEntity(
-      valor,
-      status,
-      itensParsed,
-      cliente,
-      id
-    );
-    const result = await this.repository.savePedido(pedidoEntity);
-    return result;
+    let result: any;
+    const transaction = await this.repository.startTransaction();
+    try {
+      const { id, cliente, itens, status, valor } = pedidoDto;
+      const itensParsed = itens.map((iten) => ({
+        descricao: iten.descricao,
+        qtd: iten.qtd,
+      }));
+      const pedidoEntity = new PedidoEntity(
+        valor,
+        status,
+        itensParsed,
+        cliente,
+        id
+      );
+      await this.repository.inTransaction(transaction, async () => {
+        result = await this.repository.savePedido(pedidoEntity);
+      });
+      return result;
+    } catch (error) {
+      await this.repository.rollbackTransaction(transaction);
+      throw error;
+    }
   }
 
   async findPedido(pedidoId: string) {
@@ -33,7 +52,17 @@ export class PedidoService {
   }
 
   async updatePedido(pedidoId: string, newStatus: PedidoStatus) {
-    const result = await this.repository.updatePedido(pedidoId, newStatus);
-    return result;
+    let result;
+    const transaction = await this.repository.startTransaction();
+    try {
+      await this.repository.inTransaction(transaction, async () => {
+        result = await this.repository.updatePedido(pedidoId, newStatus);
+      })
+      await this.repository.commitTransaction(transaction);
+      return result;
+    } catch (error) {
+      await this.repository.rollbackTransaction(transaction);
+      throw error;
+    }
   }
 }
