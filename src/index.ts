@@ -11,9 +11,7 @@ const queue = RabbitQueue.Instance;
 const router = new Router(httpServer, connection);
 
 queue.connect().then(() => {
-  Object.entries(process.env.queues)?.forEach(([key, value]) => {
-    queue.addQueue(value);
-  });
+  queue.addQueue(process.env.QUEUE_1);
 });
 
 router.start();

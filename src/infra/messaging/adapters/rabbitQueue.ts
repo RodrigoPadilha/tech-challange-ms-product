@@ -1,4 +1,4 @@
-import { emptyToUndefined } from "../../../util/functions";
+import { emptyToUndefined } from "@src/util/functions";
 import { IMessagingQueue, IMessagingQueueProps } from "../ports/queue";
 import * as rabbitMQ from 'amqplib/callback_api';
 
@@ -15,6 +15,7 @@ export class RabbitQueue implements IMessagingQueue {
 
     private constructor() {
         RabbitQueue.props = {
+            url: process.env.QUEUE_URL,
             host: process.env.QUEUE_HOST,
             port: process.env.QUEUE_PORT,
             password: process.env.QUEUE_PASSWORD,
@@ -24,7 +25,11 @@ export class RabbitQueue implements IMessagingQueue {
     }
 
     private createConnectionString() {
-        const {host, password, user, port} = RabbitQueue.props;
+        const {host, password, user, port, url} = RabbitQueue.props;
+        if(url) {
+            RabbitQueue.connectionString = url;
+            return;
+        }
         RabbitQueue.connectionString = `${host}:${port}`;
         if (emptyToUndefined(user) && emptyToUndefined(password)) {
             RabbitQueue.connectionString = `${user}:${password}@${RabbitQueue.connectionString}`;

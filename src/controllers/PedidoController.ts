@@ -1,13 +1,29 @@
 import IHttpServer from "@adapters/ports/IHttpServer";
 import { badRequest, created, ok, serverError } from "../util/http-helper";
 import { PedidoService } from "@src/services/PedidoService";
-import { PedidoStatus } from "@src/entities/PedidoEntity";
+import { PedidoEntity, PedidoStatus } from "@src/entities/PedidoEntity";
+import { IMessagingQueue } from "@src/infra/messaging/ports/queue";
+import { PedidoDto } from "@src/services/interface";
 
 export class PedidoController {
   constructor(
     private readonly httpServer: IHttpServer,
-    private readonly pedidoService: PedidoService
-  ) {}
+    private readonly pedidoService: PedidoService,
+    private readonly messagingQueue: IMessagingQueue
+  ) {
+    this.subscribeToQueue();
+  }
+
+  private subscribeToQueue() {
+    this.messagingQueue.subscribeToQueue(process.env.QUEUE_1, async (message: string) => {
+      try {
+        const pedido = JSON.parse(message) as PedidoDto;
+        await this.pedidoService.createPedido(pedido);
+      } catch (error) {
+        console.log(error);
+      }
+    })
+  }
 
   registerEndpointListPedidos() {
     this.httpServer.register(

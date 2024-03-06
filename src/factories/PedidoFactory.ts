@@ -1,6 +1,7 @@
 import { IConnectionDatabase } from "@adapters/ports/IConnectionDatabase";
 import IHttpServer from "@adapters/ports/IHttpServer";
 import { PedidoController } from "@src/controllers/PedidoController";
+import { RabbitQueue } from "@src/infra/messaging/adapters/rabbitQueue";
 import { PedidoRepository } from "@src/repositories/PedidoRepository";
 import { PedidoService } from "@src/services/PedidoService";
 
@@ -15,7 +16,8 @@ export class PedidoFactory {
     const pedidoService = new PedidoService(pedidoRepository);
     this.pedidoController = new PedidoController(
       this.httpServer,
-      pedidoService
+      pedidoService,
+      RabbitQueue.Instance
     );
   }
 
