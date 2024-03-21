@@ -9,4 +9,9 @@ export interface IConnectionDatabase {
   savePedido(newPedido: PedidoEntity): Promise<any>;
   findPedidoById(pedidoId: string): Promise<any>;
   updatePedido(pedidoId: string, newStatus: PedidoStatus): Promise<any>;
+
+  startTransaction?(): Promise<any>;
+  inTransaction?(transaction: any, callback: () => Promise<any>): Promise<any>;
+  commitTransaction?(transaction: any): Promise<any>;
+  rollbackTransaction?(transaction: any): Promise<any>;
 }
