@@ -72,4 +72,20 @@ export class PedidoRepository implements IPedidoRepository {
     );
     return pedidoEntity;
   }
+
+  startTransaction(): Promise<any> {
+    return this.connection.startTransaction();
+  }
+
+  inTransaction(transaction: any, callback: () => Promise<any>): Promise<any> {
+    return this.connection.inTransaction(transaction, callback);
+  }
+
+  commitTransaction(transaction: any): Promise<any> {
+    return this.connection.commitTransaction(transaction);
+  }
+
+  rollbackTransaction(transaction: any): Promise<any> {
+    return this.connection.rollbackTransaction(transaction);
+  }
 }
